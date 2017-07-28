@@ -1,0 +1,6 @@
+# IDE config
+.idea
+.doc
+.settings
+.libs
+.target

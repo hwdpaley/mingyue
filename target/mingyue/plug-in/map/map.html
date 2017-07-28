@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head><title>世界地图 by Qunee</title>
+    <meta charset=utf-8>
+</head>
+<body class=layout style="margin: 0px;">
+<div style="height: 600px;" id="canvas"></div>
+<script src="./src/qunee-min.js"></script>
+<script src="./src/js.js"></script>
+<script>
+    var colors = ["#D5E7C4", "#CDE6FF", "#EFDEE6", "#FFF8CC"];
+    var stateColors = ['#2898E0', '#4BB9FF', '#2EADFF'];
+    var index = 0;
+
+    var map = new Q.MapChart('canvas');
+
+    map.onclick = function (evt) {
+        var currentElement = evt.getData();
+        if (currentElement && map.selectionModel.isSelected(currentElement)) {
+            this.centerElement(currentElement);
+        }
+    }
+
+
+    map.loadTopoJSON('data/jingzhou.json', {
+        zIndex: -1, callback: function (area) {
+            area.setStyle(Q.Styles.SHAPE_FILL_COLOR, colors[index++ % colors.length]);
+
+        }, onfinish: function (map) {
+            var beijing = map.createNode("北京", 2400, -798.6);
+            beijing.image = Q.Graphs.server;
+            var shanghai = map.createNode("上海", 2525, -715);
+            var changsha = map.createNode("长沙", 2421, -700);
+            var edge = map.createEdge(beijing, shanghai);
+           // var edge = map.createEdge("北京 > 上海", beijing, shanghai);
+            edge.setStyle(Q.Styles.EDGE_COLOR, "#2898E0");
+            edge.setStyle(Q.Styles.LABEL_BACKGROUND_COLOR, "rgba(255,255,255,0.7)");
+            edge = map.createEdge("上海 > 长沙", shanghai, changsha);
+            edge.setStyle(Q.Styles.EDGE_COLOR, "#2898E0");
+            edge.setStyle(Q.Styles.LABEL_BACKGROUND_COLOR, "rgba(255,255,255,0.7)");
+            map.zoomToOverview();
+
+        }
+    });
+</script>
+</body>
+</html>
